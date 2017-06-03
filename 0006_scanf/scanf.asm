@@ -20,23 +20,20 @@ asm_main:
   pusha
 
   ; printf(msg)
-  mov ebp, esp
   push msg
   call printf
-  mov esp, ebp
+  pop eax
 
   ; printf(prompt)
-  mov ebp, esp
   push prompt
   call printf
-  mov esp, ebp
+  pop eax
 
   ; scanf("%d", &num)
-  mov ebp, esp
   push num              ; indirizzo di num
   push fmt
   call scanf
-  mov esp, ebp
+  add esp, 8
 
   ; calcola il doppio
   mov eax, [num]
@@ -44,32 +41,27 @@ asm_main:
   mov [doppio], eax
 
   ; printf output
-  mov ebp, esp
   push output1
   call printf
-  mov esp, ebp
+  pop eax
 
-  mov ebp, esp
   push DWORD [num]
   push fmt
   call printf
-  mov esp, ebp
+  add esp, 8
 
-  mov ebp, esp
   push output2
   call printf
-  mov esp, ebp
+  pop eax
 
-  mov ebp, esp
   push DWORD [doppio]
   push fmt
   call printf
-  mov esp, ebp
+  add esp, 8
 
-  mov ebp, esp
   push newline
   call printf
-  mov esp, ebp
+  pop eax
 
   popa
   mov eax, 0

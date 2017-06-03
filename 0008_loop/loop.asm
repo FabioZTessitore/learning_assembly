@@ -27,34 +27,30 @@ asm_main:
   pusha
 
   ; printf(msg)
-  mov ebp, esp
   push msg
   call printf
-  mov esp, ebp
+  pop eax
 
   ; stampa vettore
-  mov ebp, esp
   push vettore
   call printf
-  mov esp, ebp
+  pop eax
   ;
   mov ecx, [size]
   mov esi, 0
 stampa_elem:
-  push ecx          ; salva ecx
-  mov ebp, esp      ; stampa elemento del vettore
-  push DWORD [vet+esi]
+  push ecx          ; salva ecx (printf lo modifica!!!)
+  push DWORD [vet+esi]  ; stampa elemento del vettore
   push fmt
   call printf
-  mov esp, ebp
+  add esp, 8
   pop ecx           ; restore ecx
   add esi, 4
   loop stampa_elem
   ;
-  mov ebp, esp
   push newline
   call printf
-  mov esp, ebp
+  pop eax
 
   ; somma degli elementi del vettore
   mov eax, 0
@@ -67,11 +63,10 @@ add_elem:
   mov [somma], eax
 
   ; stampa somma
-  mov ebp, esp
   push DWORD [somma]
   push output1
   call printf
-  mov esp, ebp
+  add esp, 8
 
   ; calcola la media
   mov edx, 0          ; EDX:EAX
@@ -81,13 +76,12 @@ add_elem:
   mov [resto], edx
 
   ; stampa media
-  mov ebp, esp
   push DWORD [size]
   push DWORD [resto]
   push DWORD [media]
   push output2
   call printf
-  mov esp, ebp
+  add esp, 16
 
   popa
   mov eax, 0

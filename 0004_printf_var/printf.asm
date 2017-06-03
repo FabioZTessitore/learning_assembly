@@ -16,23 +16,20 @@ asm_main:
 
   mov DWORD [var], 7
 
-  mov ebp, esp
   push msg
   call printf
-  mov esp, ebp
+  pop eax
 
   ; stampa della variabile intera
   ; push dei parametri in ordine inverso
-  mov ebp, esp
   push DWORD [var]
   push fmt
   call printf
-  mov esp, ebp
+  add esp, 8
 
-  mov ebp, esp
   push newline
   call printf
-  mov esp, ebp
+  pop eax
 
   popa
   mov eax, 0

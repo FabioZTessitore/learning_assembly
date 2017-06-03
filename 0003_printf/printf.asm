@@ -9,10 +9,9 @@ asm_main:
   enter 0,0
   pusha
 
-  mov ebp, esp      ; save the stack pointer
   push msg          ; put msg on the stack
   call printf
-  mov esp, ebp      ; restore the stack pointer
+  pop eax
 
   popa
   mov eax, 0

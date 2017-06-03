@@ -16,26 +16,23 @@ asm_main:
 
   mov BYTE [var], 7
 
-  mov ebp, esp
   push msg
   call printf
-  mov esp, ebp
+  pop eax
 
   ; stampa della variabile intera
   ; push dei parametri in ordine inverso
-  mov ebp, esp
   mov al, [var]     ; sposta il byte da stampare
                     ; in un registro.
   movzx eax, al     ; poi estende il valore alla dword
   push eax
   push fmt
   call printf
-  mov esp, ebp
+  add esp, 8
 
-  mov ebp, esp
   push newline
   call printf
-  mov esp, ebp
+  pop eax
 
   popa
   mov eax, 0

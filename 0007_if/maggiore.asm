@@ -23,42 +23,36 @@ asm_main:
   pusha
 
   ; printf(msg)
-  mov ebp, esp
   push msg
   call printf
-  mov esp, ebp
+  pop eax
 
   ; printf(prompt)
-  mov ebp, esp
   push prompt
   call printf
-  mov esp, ebp
+  pop eax
 
   ; scanf("%d", &num1)
-  mov ebp, esp
   push num1              ; indirizzo di num1
   push fmt
   call scanf
-  mov esp, ebp
+  add esp, 8
 
   ; printf(prompt)
-  mov ebp, esp
   push prompt
   call printf
-  mov esp, ebp
+  pop eax
 
   ; scanf("%d", &num2)
-  mov ebp, esp
   push num2              ; indirizzo di num2
   push fmt
   call scanf
-  mov esp, ebp
+  add esp, 8
 
   ; printf output
-  mov ebp, esp
   push output
   call printf
-  mov esp, ebp
+  pop eax
 
   ; determina il maggiore e stampa
   ; if (num1 >= num2) {
@@ -75,16 +69,14 @@ asm_main:
 elsecase:
   mov eax, [num2]
 next:
-  mov ebp, esp      ; stampa il massimo
   push eax
   push fmt
   call printf
-  mov esp, ebp
+  add esp, 8
 
-  mov ebp, esp
   push newline
   call printf
-  mov esp, ebp
+  pop eax
 
   popa
   mov eax, 0
