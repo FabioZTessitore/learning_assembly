@@ -1,6 +1,6 @@
-; loop.asm
+; subroutine.asm
 ;
-; calcola la somma e la media di un vettore di interi
+; calcola la somma e la media di un vettore di interi mediante subroutine
 
 segment .data
 msg         db "Somma e media di un vettore", 10, 10, 0
@@ -10,7 +10,7 @@ newline     db 10, 0
 vet         dd 1, 2, 4, 4, 7, 9, 11, 12, 15, 17     ; somma 82, media 8.2
 size        dd 10
 output1     db "Somma: %d", 10, 0
-output2     db "Media: %d con resto %d/%d", 10, 0
+output2     db "Media: %d con resto %d (/%d)", 10, 0
 
 segment .bss
 somma       resd 1
@@ -32,16 +32,18 @@ asm_main:
   pop ecx
 
   ; stampa vettore
+  ; printf(vettore)
   push vettore
   call printf
   pop ecx
-  ;
+  ; stampa_vettore(vet, size)
   push DWORD [size]
   push vet
   call stampa_vettore
   add esp, 8
 
   ; somma degli elementi del vettore
+  ; somma = somma_vettore(vet, size)
   push DWORD [size]
   push vet
   call somma_vettore
@@ -49,12 +51,14 @@ asm_main:
   mov [somma], eax
 
   ; stampa somma
+  ; printf(output1, somma)
   push DWORD [somma]
   push output1
   call printf
   add esp, 8
 
   ; calcola la media
+  ; calcola_media(somma, size, &media, &resto)
   push DWORD resto
   push DWORD media
   push DWORD [size]
@@ -63,6 +67,7 @@ asm_main:
   add esp, 16
 
   ; stampa media
+  ; printf(output2, media, resto, size)
   push DWORD [size]
   push DWORD [resto]
   push DWORD [media]
@@ -75,6 +80,8 @@ asm_main:
   leave
   ret
 
+; stampa_elemento
+; stampa un valore intero (dd)
 stampa_elemento:
   enter 0,0
   pusha
@@ -117,7 +124,9 @@ stampa_vettore:
 somma_vettore:
   ; size ebp+12
   ; &vet ebp+8
-  ; [ebp-4] somma
+  ;
+  ; local var
+  ; somma ebp-4
   enter 4,0
   pusha
 
@@ -149,17 +158,17 @@ calcola_media:
   enter 8, 0
   pusha
 
-  mov edx, 0          ; EDX:EAX
+  mov edx, 0                  ; EDX:EAX
   mov eax, [ebp+8]
   idiv DWORD [ebp+12]         ; EAX (quot), EDX (remainder)
   mov [ebp-4], eax
   mov [ebp-8], edx
 
-  mov eax, [ebp+16]
-  mov ebx, [ebp-4]
+  mov eax, [ebp+16]           ; copia media locale in
+  mov ebx, [ebp-4]            ; media passata per riferimento
   mov [eax], ebx
 
-  mov eax, [ebp+20]
+  mov eax, [ebp+20]           ; idem per il resto
   mov ebx, [ebp-8]
   mov [eax], ebx
 

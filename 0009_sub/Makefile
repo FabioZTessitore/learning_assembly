@@ -1,14 +1,14 @@
 CC=gcc
 CFLAGS=-g -Wall -ansi -pedantic
 
-driver: driver.o loop.o
-	$(CC) -m32 driver.o loop.o -o driver
+driver: driver.o subroutine.o
+	$(CC) -m32 driver.o subroutine.o -o driver
 
 driver.o: driver.c
 	$(CC) $(CFLAGS) -m32 -c driver.c -o driver.o
 
-loop.o: loop.asm
-	nasm -f elf32 loop.asm -o loop.o -l loop.lst
+subroutine.o: subroutine.asm
+	nasm -f elf32 subroutine.asm -o subroutine.o -l subroutine.lst
 
 .PHONY: clean
 clean:
