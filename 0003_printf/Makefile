@@ -1,14 +1,14 @@
 CC=gcc
 CFLAGS=-g -Wall -ansi -pedantic
 
-driver: driver.o printf.o
-	$(CC) -m32 driver.o printf.o -o driver
+driver: driver.o puts.o
+	$(CC) -m32 driver.o puts.o -o driver
 
 driver.o: driver.c
 	$(CC) $(CFLAGS) -m32 -c driver.c -o driver.o
 
-printf.o: printf.asm
-	nasm -f elf32 printf.asm -o printf.o -l printf.lst
+puts.o: puts.asm
+	nasm -f elf32 puts.asm -o puts.o -l puts.lst
 
 .PHONY: clean
 clean:

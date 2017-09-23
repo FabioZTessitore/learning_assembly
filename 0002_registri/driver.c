@@ -14,6 +14,11 @@
  * (gdb) ni
  * (gdb) disassemble asm_main
  * (gdb) i r
+ * (gdb) ni
+ * (gdb) disassemble asm_main
+ * (gdb) i r
+ * (gdb) cont
+ * (gdb) quit
  */
 
 int asm_main();

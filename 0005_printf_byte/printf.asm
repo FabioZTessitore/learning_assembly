@@ -4,7 +4,7 @@ fmt     db "%d", 0
 newline db 10, 0
 
 segment .bss
-var     resb 1      ; voglio stampare un byte
+var     resb 1      ; only one byte
 
 segment .text
 global asm_main
@@ -16,20 +16,22 @@ asm_main:
 
   mov BYTE [var], 7
 
+  ; printf(msg)
   push msg
   call printf
   pop eax
 
-  ; stampa della variabile intera
-  ; push dei parametri in ordine inverso
-  mov al, [var]     ; sposta il byte da stampare
-                    ; in un registro.
-  movzx eax, al     ; poi estende il valore alla dword
+  ; move var into a register,
+  ; then extends it to a dword
+  mov al, [var]
+  movzx eax, al
+  ; printf(fmt, var)
   push eax
   push fmt
   call printf
   add esp, 8
 
+  ; printf(newline)
   push newline
   call printf
   pop eax

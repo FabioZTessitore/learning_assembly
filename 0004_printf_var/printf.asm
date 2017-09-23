@@ -4,7 +4,7 @@ fmt     db "%d", 0
 newline db 10, 0
 
 segment .bss
-var     resd 1      ; una int e' DWORD
+var     resd 1      ; int is a DWORD
 
 segment .text
 global asm_main
@@ -14,19 +14,21 @@ asm_main:
   enter 0,0
   pusha
 
+  ; var = 7
   mov DWORD [var], 7
 
+  ; printf(msg)
   push msg
   call printf
   pop eax
 
-  ; stampa della variabile intera
-  ; push dei parametri in ordine inverso
-  push DWORD [var]
+  ; printf(fmt, var)
+  push DWORD [var]    ; pass by value
   push fmt
   call printf
   add esp, 8
 
+  ; printf(newline)
   push newline
   call printf
   pop eax

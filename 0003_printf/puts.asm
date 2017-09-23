@@ -1,16 +1,17 @@
 segment .data
-msg db "Hello, World!", 10, 0
+msg db "Hello, World!", 0
 
 segment .text
 global asm_main
-extern printf
+extern puts
 
 asm_main:
   enter 0,0
   pusha
 
+  ; puts(msg)
   push msg          ; put msg on the stack
-  call printf
+  call puts
   pop eax
 
   popa

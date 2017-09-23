@@ -10,6 +10,8 @@
  * (gdb) break asm_main
  * (gdb) run
  * (gdb) disassemble asm_main
+ * (gdb) cont
+ * (gdb) quit
  */
 
 int asm_main();

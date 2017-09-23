@@ -5,7 +5,7 @@ asm_main:
   enter 0,0
   pusha
 
-  ; code here
+  ; code goes here
 
   popa
   mov eax, 0    ; return value
