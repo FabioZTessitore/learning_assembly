@@ -31,7 +31,7 @@ asm_main:
   call printf
   pop eax
 
-  ; stampa vettore
+  ; printf(vettore)
   push vettore
   call printf
   pop eax
@@ -39,43 +39,46 @@ asm_main:
   mov ecx, [size]
   mov esi, 0
 stampa_elem:
-  push ecx          ; salva ecx (printf lo modifica!!!)
-  push DWORD [vet+esi]  ; stampa elemento del vettore
+  ; printf("%d", vet[i])
+  push ecx          ; save ecx (printf change it!!!)
+  push DWORD [vet+esi]
   push fmt
   call printf
   add esp, 8
-  pop ecx           ; restore ecx
-  add esi, 4
+  ;
+  pop ecx
+  add esi, 4        ; jump to next dword
   loop stampa_elem
   ;
   push newline
   call printf
   pop eax
 
-  ; somma degli elementi del vettore
-  mov eax, 0
+  ; sum items
+  mov eax, 0        ; sum = 0
   mov ecx, [size]
   mov esi, 0
 add_elem:
   add eax, [vet+esi]
   add esi, 4
   loop add_elem
+  ;
   mov [somma], eax
 
-  ; stampa somma
+  ; printf("%d", somma)
   push DWORD [somma]
   push output1
   call printf
   add esp, 8
 
-  ; calcola la media
-  mov edx, 0          ; EDX:EAX
+  ; mean
+  mov edx, 0                ; EDX:EAX = somma (prepare for division)
   mov eax, [somma]
   idiv DWORD [size]         ; EAX (quot), EDX (remainder)
   mov [media], eax
   mov [resto], edx
 
-  ; stampa media
+  ; printf(output2, media, resto, size)
   push DWORD [size]
   push DWORD [resto]
   push DWORD [media]

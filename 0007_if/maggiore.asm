@@ -10,8 +10,8 @@ newline     db 10, 0
 output      db "Il maggiore e' ", 0
 
 segment .bss
-num1         resd 1      ; una int e' DWORD
-num2         resd 1      ; una int e' DWORD
+num1        resd 1
+num2        resd 1
 
 segment .text
 global asm_main
@@ -33,7 +33,7 @@ asm_main:
   pop eax
 
   ; scanf("%d", &num1)
-  push num1              ; indirizzo di num1
+  push num1
   push fmt
   call scanf
   add esp, 8
@@ -44,7 +44,7 @@ asm_main:
   pop eax
 
   ; scanf("%d", &num2)
-  push num2              ; indirizzo di num2
+  push num2
   push fmt
   call scanf
   add esp, 8
@@ -63,17 +63,18 @@ asm_main:
   mov ebx, [num1]
   mov ecx, [num2]
   cmp ebx, ecx
-  jl elsecase       ; se num1 < num2 salta all'else
-  mov eax, [num1]
+  jl elsecase       ; if num1 < num2 go to else
+  mov eax, ebx
   jmp next
 elsecase:
-  mov eax, [num2]
+  mov eax, ecx
 next:
+  ; printf("%d", eax)
   push eax
   push fmt
   call printf
   add esp, 8
-
+  ; printf(newline)
   push newline
   call printf
   pop eax
