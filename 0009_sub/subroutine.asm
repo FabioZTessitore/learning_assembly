@@ -31,18 +31,17 @@ asm_main:
   call printf
   pop ecx
 
-  ; stampa vettore
   ; printf(vettore)
   push vettore
   call printf
   pop ecx
+
   ; stampa_vettore(vet, size)
   push DWORD [size]
   push vet
   call stampa_vettore
   add esp, 8
 
-  ; somma degli elementi del vettore
   ; somma = somma_vettore(vet, size)
   push DWORD [size]
   push vet
@@ -50,14 +49,12 @@ asm_main:
   add esp, 8
   mov [somma], eax
 
-  ; stampa somma
   ; printf(output1, somma)
   push DWORD [somma]
   push output1
   call printf
   add esp, 8
 
-  ; calcola la media
   ; calcola_media(somma, size, &media, &resto)
   push DWORD resto
   push DWORD media
@@ -66,7 +63,6 @@ asm_main:
   call calcola_media
   add esp, 16
 
-  ; stampa media
   ; printf(output2, media, resto, size)
   push DWORD [size]
   push DWORD [resto]
@@ -80,12 +76,14 @@ asm_main:
   leave
   ret
 
-; stampa_elemento
+; stampa_elemento(elem)
 ; stampa un valore intero (dd)
+; ebp+8   elem, elemento intero da stampare
 stampa_elemento:
   enter 0,0
   pusha
 
+  ; printf(fmt, elem)
   push DWORD [ebp+8]
   push fmt
   call printf
@@ -96,16 +94,18 @@ stampa_elemento:
   leave
   ret
 
+; stampa_vettore(vet, size)
+; &vet ebp+8
+; size ebp+12
 stampa_vettore:
-  ; size ebp+12
-  ; &vet ebp+8
   enter 0,0
   pusha
 
-  mov ecx, [ebp+12]
-  mov edx, [ebp+8]
+  mov ecx, [ebp+12]   ; size
+  mov edx, [ebp+8]    ; &vet
   mov esi, 0
   item:
+  ; stampa_elemento(vet[i])
   push DWORD [edx+esi]
   call stampa_elemento
   add esp, 4
@@ -121,19 +121,20 @@ stampa_vettore:
   leave
   ret
 
+; somma = somma_vettore(vet, size)
+; &vet ebp+8
+; size ebp+12
+;
+; local var
+; somma ebp-4
 somma_vettore:
-  ; size ebp+12
-  ; &vet ebp+8
-  ;
-  ; local var
-  ; somma ebp-4
   enter 4,0
   pusha
 
   mov DWORD [ebp-4], 0    ; somma = 0
 
-  mov ecx, [ebp+12]
-  mov edx, [ebp+8]
+  mov ecx, [ebp+12]       ; size
+  mov edx, [ebp+8]        ; &vet
   mov esi, 0
   add_elem:
   mov eax, [edx+esi]      ; somma += v[i]
@@ -146,21 +147,22 @@ somma_vettore:
   leave
   ret
 
+; calcola_media(somma, size, &media, &resto)
+; somma ebp+8
+; size  ebp+12
+; &media ebp+16
+; &resto ebp+20
+;
+; local var
+; media ebp-4
+; resto ebp-8
 calcola_media:
-  ; somma ebp+8
-  ; size  ebp+12
-  ; &media ebp+16
-  ; &resto ebp+20
-  ;
-  ; local var
-  ; media ebp-4
-  ; resto ebp-8
   enter 8, 0
   pusha
 
-  mov edx, 0                  ; EDX:EAX
+  mov edx, 0                  ; EDX:EAX = somma
   mov eax, [ebp+8]
-  idiv DWORD [ebp+12]         ; EAX (quot), EDX (remainder)
+  idiv DWORD [ebp+12]         ; somma/size -> EAX (quot), EDX (remainder)
   mov [ebp-4], eax
   mov [ebp-8], edx
 
